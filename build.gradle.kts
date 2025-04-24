@@ -1,4 +1,5 @@
 plugins {
+    application
     kotlin("jvm") version "2.1.20"
 }
 
@@ -12,6 +13,10 @@ repositories {
 dependencies {
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
+}
+
+application {
+    mainClass.set("com.example.MainKt")
 }
 
 tasks.test {
