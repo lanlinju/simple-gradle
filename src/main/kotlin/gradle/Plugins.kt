@@ -39,3 +39,35 @@ class DependencyConfig {
     var libVersion: String = ""
     var testVersion: String = ""
 }
+
+class JavaPlugin : Plugin {
+    override fun apply(project: Project) {
+        project.tasks.register("compileJava") {
+            group = "compile"
+            description = "Compiles Java source code"
+        }
+
+        project.tasks.register("compileTestJava") {
+            group = "compile"
+            dependsOn("compileJava")
+        }
+
+        project.tasks.register("processResources") {
+            dependsOn("compileJava")
+        }
+
+        project.tasks.register("classes") {
+            dependsOn("compileJava", "processResources")
+        }
+
+        project.tasks.register("jar") { dependsOn("classes") }
+
+        project.tasks.register("clean") {
+            group = "build"
+            description = "Cleans the build directory"
+            doLast {
+                println("Cleaning the build directory...")
+            }
+        }
+    }
+}
