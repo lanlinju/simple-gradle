@@ -1,18 +1,20 @@
 package com.example
 
+import com.example.gradle.ApplicationPlugin
 import com.example.gradle.DependencyConfig
 import com.example.gradle.DependencyManagementPlugin
 import com.example.gradle.ExecTask
 import com.example.gradle.HelloPlugin
 import com.example.gradle.JavaPlugin
 import com.example.gradle.Project
+import com.example.gradle.application
 import com.example.gradle.buildScript
 import com.example.gradle.configure
 import com.example.gradle.getExtension
 import com.example.gradle.register
 
 fun Project.configurationPhrase() {
-    apply(JavaPlugin())
+    apply(ApplicationPlugin())
     apply(HelloPlugin())
     apply(DependencyManagementPlugin())
 
@@ -25,6 +27,11 @@ fun Project.configurationPhrase() {
     dependencies {
         implementation("com.google.android.material:material:1.4.0")
         testImplementation("junit:junit:4.13")
+    }
+
+    application {
+        mainClass = "com.example.HelloKt"
+        applicationName = "simple-gradle-1.0.0"
     }
 
     tasks.register("printHello") {
@@ -58,7 +65,7 @@ fun Project.executionPhrase(command: String) {
 }
 
 fun main(args: Array<String>) {
-    val command = "runAll"
+    val command = "run"
 
     val project = buildScript {
         configurationPhrase()        // Configuration Phrase

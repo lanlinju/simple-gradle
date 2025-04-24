@@ -71,3 +71,36 @@ class JavaPlugin : Plugin {
         }
     }
 }
+
+
+@DependsOn(plugins = [JavaPlugin::class])
+class ApplicationPlugin : Plugin {
+    override fun apply(project: Project) {
+        // 创建扩展配置（如主类）
+        project.extensions.create("application", ApplicationExtension::class.java) {
+            mainClass = "com.example.Main" // 默认主类
+        }
+
+        // 注册运行任务
+        project.tasks.register<ExecTask>("run") {
+            group = "application"
+            description = "Runs the application"
+            dependsOn("jar") // 依赖 Java 插件的打包任务
+
+            doLast {
+                val extension = project.getExtension<ApplicationExtension>("application")
+                commandLine("java", "-jar", project.outputJar, extension.mainClass)
+            }
+        }
+    }
+}
+
+// 应用扩展配置类
+class ApplicationExtension {
+    var mainClass: String = ""
+    var applicationName = ""
+}
+
+// 辅助方法：获取 Jar 任务输出路径
+val Project.outputJar: String
+    get() = "build/libs/simple-gradle-1.0.0.jar" // 简化实现

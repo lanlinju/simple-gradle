@@ -2,6 +2,8 @@
 
 package com.example.gradle
 
+import kotlin.reflect.full.findAnnotations
+
 class DefaultRepositoryHandler() : RepositoryHandler {
     private val repos = mutableListOf<String>()
     override fun mavenCentral() {
@@ -105,17 +107,22 @@ class DefaultProject(override val name: String) : Project {
     private val depens = DefaultDependencyHandler()
     private val appliedPlugins = mutableMapOf<String, Plugin>() // 记录已应用的插件
 
-    override fun repositories(configuration: RepositoryHandler.() -> Unit) {
-        configuration(repos)
-    }
-
-    override fun dependencies(configuration: DependencyHandler.() -> Unit) {
-        configuration(depens)
-    }
+    override fun repositories(configuration: RepositoryHandler.() -> Unit) = configuration(repos)
+    override fun dependencies(configuration: DependencyHandler.() -> Unit) = configuration(depens)
 
     override fun apply(plugin: Plugin) {
+        val pluginClass = plugin.javaClass.kotlin
         val pluginName = plugin.javaClass.simpleName
+
         if (appliedPlugins.contains(pluginName)) return
+
+        val dependsOnAnnotation = pluginClass.findAnnotations(DependsOn::class)
+        dependsOnAnnotation.firstOrNull()?.plugins?.forEach { kClass ->
+            val dependencyClass = kClass.java
+            val dependencyPlugin = dependencyClass.getDeclaredConstructor().newInstance() as Plugin
+            apply(dependencyPlugin)
+        }
+
         appliedPlugins[pluginName] = plugin
         plugin.apply(this)
     }

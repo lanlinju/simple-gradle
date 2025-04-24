@@ -1,5 +1,11 @@
 package com.example.gradle
 
+import kotlin.reflect.KClass
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DependsOn(val plugins: Array<KClass<out Plugin>>)
+
 interface Project {
     val name: String
     val tasks: TaskContainer

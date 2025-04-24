@@ -15,6 +15,10 @@ fun <T : Any> Project.getExtension(name: String, block: T.() -> Unit = {}): T {
     return extensions.getByName(name, block)
 }
 
+fun  Project.application(config: ApplicationExtension.() -> Unit) {
+    getExtension<ApplicationExtension>("application").apply(config)
+}
+
 inline fun <reified T : Any> ExtensionContainer.getByType(): T {
     return getByName(T::class.java.name)
 }
