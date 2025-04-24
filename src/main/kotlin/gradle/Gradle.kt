@@ -101,6 +101,8 @@ class DefaultExtensionContainer : ExtensionContainer {
 }
 
 class DefaultProject(override val name: String) : Project {
+    override var version: String = "1.0.0"
+    override var group: String = "com.example"
     override val tasks: TaskContainer = DefaultTaskContainer()
     override val extensions = DefaultExtensionContainer()
     private val repos = DefaultRepositoryHandler()
@@ -154,18 +156,3 @@ fun buildScript(name: String = "my-project", scope: Project.() -> Unit): Project
     scope(project)
     return project
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

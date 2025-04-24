@@ -8,6 +8,8 @@ annotation class DependsOn(val plugins: Array<KClass<out Plugin>>)
 
 interface Project {
     val name: String
+    var version: String
+    var group: String
     val tasks: TaskContainer
     val extensions: ExtensionContainer
     fun repositories(configuration: RepositoryHandler.() -> Unit)
@@ -57,4 +59,3 @@ interface ExtensionContainer {
     fun <T : Any> create(name: String, extension: T)
     fun <T : Any> getByName(name: String, block: T.() -> Unit = {}): T
 }
-

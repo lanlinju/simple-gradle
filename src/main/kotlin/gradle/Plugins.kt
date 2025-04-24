@@ -89,7 +89,7 @@ class ApplicationPlugin : Plugin {
 
             doLast {
                 val extension = project.getExtension<ApplicationExtension>("application")
-                commandLine("java", "-jar", project.outputJar, extension.mainClass)
+                commandLine("java", "-cp", extension.applicationClassPath, extension.mainClass)
             }
         }
     }
@@ -97,10 +97,11 @@ class ApplicationPlugin : Plugin {
 
 // 应用扩展配置类
 class ApplicationExtension {
-    var mainClass: String = ""
+    var mainClass: String = "com.example.Main"
     var applicationName = ""
+    var applicationClassPath = "build/classes/kotlin/main"
 }
 
-// 辅助方法：获取 Jar 任务输出路径
-val Project.outputJar: String
-    get() = "build/libs/simple-gradle-1.0.0.jar" // 简化实现
+fun  Project.application(config: ApplicationExtension.() -> Unit) {
+    getExtension<ApplicationExtension>("application").apply(config)
+}

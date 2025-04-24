@@ -1,7 +1,5 @@
 package com.example.gradle
 
-import kotlin.system.exitProcess
-
 class ExecTask(
     name: String,
     group: String? = "exec",

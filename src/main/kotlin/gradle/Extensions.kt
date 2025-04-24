@@ -15,10 +15,6 @@ fun <T : Any> Project.getExtension(name: String, block: T.() -> Unit = {}): T {
     return extensions.getByName(name, block)
 }
 
-fun  Project.application(config: ApplicationExtension.() -> Unit) {
-    getExtension<ApplicationExtension>("application").apply(config)
-}
-
 inline fun <reified T : Any> ExtensionContainer.getByType(): T {
     return getByName(T::class.java.name)
 }
@@ -35,5 +31,17 @@ inline fun <reified T : Task> TaskContainer.register(name: String, noinline conf
 }
 
 inline fun <reified T : Task> TaskContainer.getByName(name: String): T {
-    return getByName(name) as?  T ?: error("Task $name is not of type ${T::class.simpleName}")
+    return getByName(name) as? T ?: error("Task $name is not of type ${T::class.simpleName}")
+}
+
+fun Project.applyApplicationPlugin() {
+    apply(ApplicationPlugin())
+}
+
+fun Project.apply(pluginId: String) {
+    when (pluginId) {
+        "java" -> apply(JavaPlugin())
+        "application" -> apply(ApplicationPlugin())
+        else -> println("Plugin '$pluginId' not found in registry.")
+    }
 }
