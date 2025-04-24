@@ -26,5 +26,10 @@ inline fun <reified T : Task> TaskContainer.register(name: String, noinline conf
     constructor.parameters.firstOrNull { it.name == "name" }?.let { args[it] = name }
     val task = constructor.callBy(args)
     task.configuration()
+    add(name, task)
     return task
+}
+
+inline fun <reified T : Task> TaskContainer.getByName(name: String): T {
+    return getByName(name) as?  T ?: error("Task $name is not of type ${T::class.simpleName}")
 }

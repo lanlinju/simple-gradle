@@ -69,6 +69,10 @@ class DefaultTaskContainer() : TaskContainer {
     }
 
     override fun getByName(name: String): Task? = tasks[name]
+    override fun add(name: String, task: Task) {
+        tasks[name] = task
+    }
+
     override fun allTasks(): Collection<Task> = tasks.values
 }
 
@@ -144,64 +148,7 @@ fun buildScript(name: String = "my-project", scope: Project.() -> Unit): Project
     return project
 }
 
-fun main(args: Array<String>) {
-    // Configuration Phrase
-    val project = buildScript {
 
-        apply(HelloPlugin())
-        apply(DependencyManagementPlugin())
-
-        repositories {
-            mavenCentral()
-            google()
-            maven { "https://maven.aliyun.com/repository/public" }
-        }
-
-        dependencies {
-            implementation("com.google.android.material:material:1.4.0")
-            testImplementation("junit:junit:4.13")
-        }
-
-        getExtension<DependencyConfig>("dependencyConfig") {
-            libVersion = "7.3.0"
-        }
-
-        configure<DependencyConfig> {
-            libVersion = "1.1.1"
-        }
-
-        tasks.register("printHello") {
-            group = "build"
-            description = "Prints a message to the console"
-            doLast {
-                println("Hello, world!4444")
-            }
-        }
-
-        tasks.register("compilerJava") {}
-        tasks.register("processResources") { dependsOn("compilerJava") }
-        tasks.register("classes") { dependsOn("processResources") }
-        tasks.register("jar") { dependsOn("classes") }
-
-        tasks.register("run") {
-            dependsOn("jar", "sayHello", "checkDependencies")
-            doFirst { println("Hello, doFirst!") }
-            doLast {
-                println("Hello, world!4444")
-                println("Hello, world!5555")
-            }
-        }
-    }
-
-    // Execution Phrase
-    with(project) {
-//        val taskName = args.getOrNull(0) ?: showConfiguration()
-        showConfiguration()
-        executeTask("run")
-    }
-
-    println("\nBUILD SUCCESSFUL!")
-}
 
 
 

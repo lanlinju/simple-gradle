@@ -14,7 +14,7 @@ interface Project {
 interface RepositoryHandler {
     fun mavenCentral()
     fun google()
-    fun maven(url:() -> String)
+    fun maven(url: () -> String)
     fun listRepositories(): List<String>
 }
 
@@ -27,6 +27,7 @@ interface DependencyHandler {
 interface TaskContainer {
     fun register(name: String, configurationAction: Task.() -> Unit): Task
     fun getByName(name: String): Task?
+    fun add(name: String, task: Task)
     fun allTasks(): Collection<Task>
 }
 
@@ -48,6 +49,6 @@ interface ExtensionContainer {
     fun <T : Any> create(name: String, type: Class<T>, configuration: T.() -> Unit = {}): T
     fun <T : Any> create(type: Class<T>, configuration: T.() -> Unit = {}): T
     fun <T : Any> create(name: String, extension: T)
-    fun <T : Any> getByName(name: String, block: T.() -> Unit={}): T
+    fun <T : Any> getByName(name: String, block: T.() -> Unit = {}): T
 }
 
