@@ -2,7 +2,7 @@ package com.example
 
 import com.example.gradle.*
 
-fun Project.configurationPhrase() {
+fun Project.configurationPhase() {
     apply("application")
     apply(HelloPlugin())
     apply(DependencyManagementPlugin())
@@ -52,7 +52,7 @@ fun Project.configurationPhrase() {
     configure<DependencyConfig> { libVersion = "1.1.1" }
 }
 
-fun Project.executionPhrase(command: String) {
+fun Project.executionPhase(command: String) {
     showConfiguration()
     executeTask(command)
 }
@@ -61,8 +61,8 @@ fun main(args: Array<String>) {
     val command = "runAll"
 
     val project = buildScript {
-        configurationPhrase()        // Configuration Phrase
-        executionPhrase(command)     // Execution Phrase
+        configurationPhase()        // Configuration Phase
+        executionPhase(command)     // Execution Phase
     }
 
     println("\nBUILD SUCCESSFUL!")

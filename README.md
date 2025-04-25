@@ -14,7 +14,7 @@ A minimal implementation of a Gradle-like DSL in Kotlin, demonstrating how to co
 ## Example Usage
 
 ```kotlin
-fun Project.configurationPhrase() {
+fun Project.configurationPhase() {
     apply("application")
     apply(HelloPlugin())
     apply(DependencyManagementPlugin())
