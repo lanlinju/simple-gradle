@@ -22,8 +22,8 @@ fun Project.configurationPhrase() {
     }
 
     application {
-        mainClass = "com.example.HelloKt"
-        applicationName = "simple-gradle-1.0.0"
+        mainClass = "com.example.HelloDialogKt"
+        applicationName = "simple-gradle"
         applicationClassPath = "build/classes/kotlin/main"
     }
 

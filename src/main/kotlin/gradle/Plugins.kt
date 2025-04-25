@@ -72,7 +72,6 @@ class JavaPlugin : Plugin {
     }
 }
 
-
 @DependsOn(plugins = [JavaPlugin::class])
 class ApplicationPlugin : Plugin {
     override fun apply(project: Project) {
