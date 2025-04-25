@@ -1,5 +1,6 @@
 package com.example.gradle
 
+import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
 
@@ -19,13 +20,16 @@ inline fun <reified T : Any> ExtensionContainer.getByType(): T {
     return getByName(T::class.java.name)
 }
 
-inline fun <reified T : Task> TaskContainer.register(name: String, noinline configuration: T.() -> Unit): T {
-    val kClass = T::class
-    val constructor = kClass.primaryConstructor ?: error("Class ${T::class.simpleName} must have primary Constructor")
+inline fun <reified T : Task> TaskContainer.register(name: String, noinline configurationAction: T.() -> Unit): T {
+    return register(name, T::class, configurationAction)
+}
+
+inline fun <reified T : Task> TaskContainer.register(name: String, type: KClass<T>, noinline configurationAction: T.() -> Unit): T {
+    val constructor = type.primaryConstructor ?: error("Class ${T::class.simpleName} must have primary Constructor")
     val args = mutableMapOf<KParameter, Any?>()
     constructor.parameters.firstOrNull { it.name == "name" }?.let { args[it] = name }
     val task = constructor.callBy(args)
-    task.configuration()
+    configurationAction(task)
     add(name, task)
     return task
 }

@@ -6,6 +6,10 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 annotation class DependsOn(val plugins: Array<KClass<out Plugin>>)
 
+interface Action<T> {
+    fun execute(t: T)
+}
+
 interface Project {
     val name: String
     var version: String
